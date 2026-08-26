@@ -1,0 +1,552 @@
+/* =========================================================================
+   OKIAX — LANDING PAGE
+   Design system: navy / verde / dourado / creme sobre grafite,
+   inspirado diretamente na identidade visual da marca.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. TOKENS (variaveis globais)
+------------------------------------------------------------------------- */
+:root {
+  --c-ink: #0b0d10;             /* fundo escuro principal */
+  --c-ink-soft: #14171c;        /* fundo escuro alternativo (cards no dark) */
+  --c-navy: #12335f;            /* azul marinho da marca */
+  --c-navy-light: #24518f;
+  --c-green: #146b47;           /* verde da marca */
+  --c-green-light: #1f8a5e;
+  --c-gold: #c9a227;            /* dourado da marca */
+  --c-gold-light: #e0bf52;
+  --c-cream: #f4f1e9;           /* off-white do wordmark */
+  --c-ice: #dce9ff;             /* azul bem claro, quase branco, p/ destaque */
+  --c-slate: #5b6472;           /* texto secundario em fundo claro */
+  --c-body-bg: #ffffff;
+  --c-alt-bg: #f7f6f2;
+  --c-border: rgba(11, 13, 16, 0.08);
+  --c-border-dark: rgba(244, 241, 233, 0.14);
+
+  --font-display: 'Space Grotesk', 'Segoe UI', Arial, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --container-w: 1180px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -18px rgba(11, 13, 16, 0.35);
+  --transition: 220ms ease;
+}
+
+/* -------------------------------------------------------------------------
+   2. RESET BASICO
+------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--c-ink);
+  background: var(--c-body-bg);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0 0 16px; line-height: 1.15; font-weight: 600; }
+p { margin: 0; }
+button { font-family: inherit; cursor: pointer; }
+svg { width: 100%; height: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--c-green-light);
+  outline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* -------------------------------------------------------------------------
+   3. BOTOES
+------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  padding: 14px 26px;
+  transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-block { width: 100%; }
+.btn-primary { background: var(--c-green); color: var(--c-cream); }
+.btn-primary:hover { background: var(--c-green-light); }
+.btn-outline { border-color: var(--c-border-dark); color: var(--c-cream); }
+.btn-outline:hover { border-color: var(--c-gold-light); color: var(--c-gold-light); }
+.btn-header { padding: 11px 22px; font-size: 0.9rem; }
+
+/* -------------------------------------------------------------------------
+   4. HEADER
+------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 13, 16, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--c-border-dark);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 24px;
+}
+.brand { display: flex; align-items: center; flex-shrink: 0; }
+
+/* Logo ampliada no cabecalho: maior destaque visual, mantendo a proporcao
+   original da arte (900x223) e alinhamento vertical central no header. */
+.brand-logo {
+  height: 58px;
+  width: auto;
+  border-radius: 4px;
+  transition: transform var(--transition);
+}
+.brand:hover .brand-logo { transform: scale(1.02); }
+
+.main-nav ul { display: flex; gap: 30px; }
+.nav-link {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: rgba(244, 241, 233, 0.85);
+  position: relative;
+  padding: 6px 0;
+  transition: color var(--transition);
+}
+.nav-link:hover { color: var(--c-gold-light); }
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 2px;
+  background: var(--c-green-light);
+  transition: width var(--transition);
+}
+.nav-link:hover::after { width: 100%; }
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 6px;
+  flex-shrink: 0;
+}
+.menu-toggle span { width: 24px; height: 2px; background: var(--c-cream); border-radius: 2px; transition: transform var(--transition), opacity var(--transition); }
+.menu-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle.is-open span:nth-child(2) { opacity: 0; }
+.menu-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* -------------------------------------------------------------------------
+   5. EYEBROW (rotulo acima dos titulos + "assinatura" de tres barras,
+      eco do icone da logo OKIAX)
+------------------------------------------------------------------------- */
+.eyebrow-bars { display: inline-flex; flex-direction: column; gap: 3px; margin-right: 10px; vertical-align: middle; }
+.eyebrow-bars i { display: block; height: 4px; border-radius: 3px; }
+.eyebrow-bars i:nth-child(1) { background: var(--c-navy-light); width: 18px; }
+.eyebrow-bars i:nth-child(2) { background: var(--c-green-light); width: 13px; }
+.eyebrow-bars i:nth-child(3) { background: var(--c-gold-light); width: 8px; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--c-ice);
+  margin-bottom: 16px;
+}
+/* Variante para uso sobre fundos claros (secoes section-light) */
+.eyebrow-dark {
+  color: var(--c-navy);
+}
+/* Variante para uso sobre o bloco de contato (fundo em destaque) */
+.eyebrow-on-accent {
+  color: var(--c-ice);
+}
+
+.section-head { max-width: 760px; margin: 0 auto 56px; text-align: left; }
+.section-lead { color: rgba(244, 241, 233, 0.72); max-width: 620px; font-size: 1.05rem; }
+.section-lead-dark { color: var(--c-slate); }
+.section-lead-on-accent { color: rgba(244, 241, 233, 0.85); }
+
+/* -------------------------------------------------------------------------
+   6. HERO
+------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  background: radial-gradient(120% 120% at 15% 0%, #14203a 0%, var(--c-ink) 55%);
+  color: var(--c-cream);
+  overflow: hidden;
+  padding: 100px 0 90px;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(244,241,233,0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244,241,233,0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(circle at 20% 20%, black, transparent 70%);
+  mask-image: radial-gradient(circle at 20% 20%, black, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+}
+.hero-title { font-size: clamp(2.1rem, 1.5rem + 2.6vw, 3.4rem); margin-bottom: 22px; letter-spacing: -0.01em; }
+.hero-subtitle { font-size: 1.1rem; color: rgba(244, 241, 233, 0.78); max-width: 560px; margin-bottom: 34px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 36px; }
+
+.hero-tags { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.hero-tags li {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 233, 0.55);
+  padding-left: 16px;
+  position: relative;
+}
+.hero-tags li::before {
+  content: "";
+  position: absolute; left: 0; top: 50%;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--c-gold-light);
+  transform: translateY(-50%);
+}
+
+/* --- Ilustracao do hero: pontos dispersos que convergem em tres barras
+       niveladas (estrutura / direcao / controle), eco do icone da logo. --- */
+.hero-visual { display: flex; justify-content: center; }
+#hero-svg { max-width: 420px; }
+
+.scatter-dots circle { fill: rgba(244, 241, 233, 0.35); }
+.link-lines line { stroke: rgba(244, 241, 233, 0.16); stroke-width: 1.4; }
+
+.level-bar rect { rx: 13px; }
+.level-bar.bar-1 rect, .level-bar.bar-1 circle { fill: var(--c-navy-light); }
+.level-bar.bar-2 rect, .level-bar.bar-2 circle { fill: var(--c-green-light); }
+.level-bar.bar-3 rect, .level-bar.bar-3 circle { fill: var(--c-gold-light); }
+
+.scatter-dots circle,
+.link-lines line,
+.level-bar { opacity: 0; animation: hero-fade-in 0.9s ease forwards; }
+.scatter-dots circle { animation-delay: 0.1s; }
+.link-lines line { animation-delay: 0.5s; }
+.level-bar.bar-1 { animation-delay: 0.85s; }
+.level-bar.bar-2 { animation-delay: 1.0s; }
+.level-bar.bar-3 { animation-delay: 1.15s; }
+
+@keyframes hero-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.level-bar rect, .level-bar circle { opacity: 1; }
+.level-bar { opacity: 0; }
+
+/* -------------------------------------------------------------------------
+   7. SECOES GERAIS
+------------------------------------------------------------------------- */
+.section { padding: 100px 0; }
+.section-dark { background: var(--c-ink); color: var(--c-cream); }
+.section-light { background: var(--c-alt-bg); color: var(--c-ink); }
+
+/* -------------------------------------------------------------------------
+   8. GRID / CARDS GENERICOS
+------------------------------------------------------------------------- */
+.grid { display: grid; gap: 28px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Problemas (cards sobre fundo escuro) */
+.card {
+  background: var(--c-ink-soft);
+  border: 1px solid var(--c-border-dark);
+  border-radius: var(--radius-md);
+  padding: 30px 26px;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.card:hover { transform: translateY(-4px); border-color: rgba(244,241,233,0.28); box-shadow: 0 20px 40px -22px rgba(0,0,0,0.6); }
+.card h3 { font-size: 1.08rem; margin-bottom: 10px; }
+.card p { color: rgba(244, 241, 233, 0.68); font-size: 0.96rem; }
+
+.card-icon {
+  width: 44px; height: 44px;
+  margin-bottom: 18px;
+  border-radius: var(--radius-md);
+  background: rgba(244, 241, 233, 0.06);
+  border: 1px solid var(--c-border-dark);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-gold-light);
+}
+.card-icon svg circle, .card-icon svg rect, .card-icon svg path { fill: currentColor; stroke: none; }
+
+/* Diferenciais (cards sobre fundo claro) */
+.diff-card {
+  background: var(--c-body-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: 30px 26px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.diff-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+.diff-card h3 { font-size: 1.08rem; margin-bottom: 10px; }
+.diff-card p { color: var(--c-slate); font-size: 0.96rem; }
+
+.diff-icon {
+  width: 44px; height: 44px;
+  margin-bottom: 18px;
+  border-radius: var(--radius-md);
+  background: rgba(18, 51, 95, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-navy);
+}
+.diff-icon svg { fill: none; stroke: currentColor; stroke-width: 1.8; }
+
+/* -------------------------------------------------------------------------
+   9. SOLUCOES
+------------------------------------------------------------------------- */
+.solution-card {
+  background: var(--c-body-bg);
+  border-radius: var(--radius-md);
+  padding: 34px 28px;
+  border: 1px solid var(--c-border);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.solution-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+.solution-index {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--c-gold);
+  display: block;
+  margin-bottom: 14px;
+}
+.solution-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+.solution-card p { color: var(--c-slate); font-size: 0.96rem; }
+
+.solution-card-cta {
+  background: var(--c-navy);
+  border-color: var(--c-navy);
+  color: var(--c-cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+.solution-card-cta h3 { color: var(--c-cream); }
+.solution-card-cta p { color: rgba(244, 241, 233, 0.78); }
+
+/* -------------------------------------------------------------------------
+   10. TIMELINE (como funciona o atendimento)
+------------------------------------------------------------------------- */
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.timeline-step { display: flex; flex-direction: column; gap: 16px; }
+.timeline-bar {
+  height: 6px;
+  border-radius: 6px;
+  background: rgba(244, 241, 233, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+.timeline-bar::after {
+  content: "";
+  position: absolute; inset: 0 100% 0 0;
+  background: linear-gradient(90deg, var(--c-navy-light), var(--c-green-light) 55%, var(--c-gold-light));
+  border-radius: 6px;
+  transition: right 1s cubic-bezier(.2,.8,.2,1);
+}
+.timeline-step.is-visible .timeline-bar::after { right: calc(100% - var(--bar-fill, 25%)); }
+.timeline-text h3 { font-size: 1.08rem; margin-bottom: 8px; }
+.timeline-text p { color: rgba(244, 241, 233, 0.68); font-size: 0.94rem; }
+
+/* -------------------------------------------------------------------------
+   11. SOBRE / INSTITUCIONAL
+------------------------------------------------------------------------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 60px;
+  align-items: start;
+}
+.about-grid > div:first-child p { color: rgba(244, 241, 233, 0.72); margin-top: 16px; font-size: 1.02rem; }
+.about-grid > div:first-child p:first-of-type { margin-top: 0; }
+
+.values-grid { display: flex; flex-direction: column; gap: 20px; }
+.value-item {
+  background: var(--c-ink-soft);
+  border: 1px solid var(--c-border-dark);
+  border-radius: var(--radius-md);
+  padding: 24px 26px;
+}
+.value-item h3 { font-size: 1rem; color: var(--c-gold-light); margin-bottom: 8px; }
+.value-item p { color: rgba(244, 241, 233, 0.72); font-size: 0.95rem; }
+
+/* -------------------------------------------------------------------------
+   12. CHAMADA FINAL / CONTATO
+------------------------------------------------------------------------- */
+.cta-final {
+  background: linear-gradient(135deg, var(--c-navy) 0%, #0f2447 60%, var(--c-ink) 100%);
+  color: var(--c-cream);
+}
+.cta-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 60px;
+  align-items: start;
+}
+.contact-info { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+.contact-info li { color: rgba(244, 241, 233, 0.85); font-size: 0.95rem; }
+.contact-info strong { color: var(--c-gold-light); font-weight: 600; }
+
+.contact-form {
+  background: rgba(11, 13, 16, 0.55);
+  border: 1px solid var(--c-border-dark);
+  border-radius: var(--radius-lg);
+  padding: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  backdrop-filter: blur(6px);
+}
+.form-row { display: flex; flex-direction: column; gap: 8px; }
+.form-row-split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.form-row-split > div { display: flex; flex-direction: column; gap: 8px; }
+
+label { font-size: 0.85rem; color: rgba(244, 241, 233, 0.75); font-weight: 500; }
+input, textarea {
+  background: rgba(244, 241, 233, 0.06);
+  border: 1px solid var(--c-border-dark);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  color: var(--c-cream);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: border-color var(--transition), background var(--transition);
+}
+input::placeholder, textarea::placeholder { color: rgba(244, 241, 233, 0.35); }
+input:focus, textarea:focus {
+  border-color: var(--c-green-light);
+  background: rgba(244, 241, 233, 0.1);
+  outline: none;
+}
+textarea { resize: vertical; min-height: 100px; }
+
+.form-row.has-error input,
+.form-row.has-error textarea { border-color: #d16a6a; }
+.form-error { font-size: 0.78rem; color: #e08a8a; min-height: 14px; }
+.form-feedback { margin: 0; font-size: 0.9rem; color: var(--c-green-light); min-height: 18px; }
+
+/* -------------------------------------------------------------------------
+   13. FOOTER
+------------------------------------------------------------------------- */
+.site-footer { background: #07080a; color: rgba(244, 241, 233, 0.75); padding-top: 64px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--c-border-dark);
+}
+.footer-brand .brand-logo { height: 38px; margin-bottom: 14px; }
+.footer-brand p { font-size: 0.92rem; max-width: 320px; }
+
+.footer-nav h3, .footer-contact h3 {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-gold-light);
+  margin-bottom: 16px;
+}
+.footer-nav ul, .footer-contact ul { display: flex; flex-direction: column; gap: 10px; }
+.footer-nav a { font-size: 0.92rem; transition: color var(--transition); }
+.footer-nav a:hover { color: var(--c-gold-light); }
+.footer-contact li { font-size: 0.92rem; }
+
+.footer-bottom { padding: 22px 24px; text-align: center; font-size: 0.82rem; }
+
+/* -------------------------------------------------------------------------
+   14. REVELACAO DE ELEMENTOS AO ROLAR (controlado via JS)
+------------------------------------------------------------------------- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* -------------------------------------------------------------------------
+   15. RESPONSIVIDADE
+------------------------------------------------------------------------- */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .timeline { grid-template-columns: repeat(2, 1fr); }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-visual { order: -1; max-width: 420px; margin: 0 auto 20px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .cta-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .brand-logo { height: 48px; }
+}
+
+/* Celulares */
+@media (max-width: 720px) {
+  .section { padding: 72px 0; }
+  .hero { padding: 84px 0 60px; }
+  .brand-logo { height: 40px; }
+
+  .main-nav {
+    position: fixed;
+    top: 68px; left: 0; right: 0;
+    background: rgba(11, 13, 16, 0.98);
+    border-bottom: 1px solid var(--c-border-dark);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition);
+  }
+  .main-nav.is-open { max-height: 400px; }
+  .main-nav ul { flex-direction: column; gap: 0; padding: 8px 24px 20px; }
+  .main-nav .nav-link { display: block; padding: 14px 0; border-bottom: 1px solid var(--c-border-dark); }
+  .menu-toggle { display: flex; }
+  .header-inner .btn-header { display: none; }
+
+  .grid-4, .grid-3, .timeline { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; text-align: left; }
+  .form-row-split { grid-template-columns: 1fr; }
+  .hero-actions .btn { width: 100%; }
+  .hero-actions { flex-direction: column; }
+}
