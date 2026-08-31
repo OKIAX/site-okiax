@@ -202,35 +202,30 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .brand-logo {
   height: 96px;
   width: auto;
-
-  border-radius: 4px;
 }
 
-/* --- Giro lento no eixo vertical (efeito "placa girando"), sem espelhar
-       o texto: usamos duas copias da mesma imagem, uma de frente e outra
-       ja pre-espelhada e virada 180o, entao a face visivel ao espectador
-       esta sempre correta durante toda a rotacao. --- */
+/* --- Fade in / fade out lento e continuo na logo do cabecalho.
+       Mantemos a mesma estrutura de duas imagens sobrepostas (grid-area)
+       para nao precisar mexer no HTML: a frente permanece sempre visivel
+       e a "back" fica oculta (nao e mais usada neste efeito). --- */
 .brand-logo-3d {
   display: inline-grid;
-  perspective: 900px;
 }
 .brand-logo-spin {
   display: grid;
-  transform-style: preserve-3d;
-  animation: logo-spin-y 9s linear infinite;
-  transition: transform var(--transition);
+  animation: logo-fade-inout 6s ease-in-out infinite;
+  transition: opacity var(--transition);
 }
 .brand-logo-face {
   grid-area: 1 / 1;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
-.brand-logo-front { transform: rotateY(0deg); }
-.brand-logo-back { transform: rotateY(180deg); }
+.brand-logo-front { opacity: 1; }
+.brand-logo-back { display: none; }
 
-@keyframes logo-spin-y {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(360deg); }
+@keyframes logo-fade-inout {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Pausa suave ao passar o mouse, para facilitar a leitura */
@@ -358,34 +353,26 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   transform: translateY(-50%);
 }
 
-/* --- Ilustracao do hero: pontos dispersos que convergem em tres barras
-       niveladas (estrutura / direcao / controle), eco do icone da logo. --- */
+/* --- Ilustracao do hero: apenas as tres barras niveladas
+       (estrutura / direcao / controle), eco direto do icone da logo. --- */
 .hero-visual { display: flex; justify-content: center; }
 #hero-svg { max-width: 420px; }
-
-.scatter-dots circle { fill: rgba(244, 241, 233, 0.35); }
-.link-lines line { stroke: rgba(244, 241, 233, 0.16); stroke-width: 1.4; }
 
 .level-bar rect { rx: 13px; }
 .level-bar.bar-1 rect, .level-bar.bar-1 circle { fill: var(--c-navy-light); }
 .level-bar.bar-2 rect, .level-bar.bar-2 circle { fill: var(--c-green-light); }
 .level-bar.bar-3 rect, .level-bar.bar-3 circle { fill: var(--c-gold-light); }
 
-.scatter-dots circle,
-.link-lines line,
 .level-bar { opacity: 0; animation: hero-fade-in 0.9s ease forwards; }
-.scatter-dots circle { animation-delay: 0.1s; }
-.link-lines line { animation-delay: 0.5s; }
-.level-bar.bar-1 { animation-delay: 0.85s; }
-.level-bar.bar-2 { animation-delay: 1.0s; }
-.level-bar.bar-3 { animation-delay: 1.15s; }
+.level-bar.bar-1 { animation-delay: 0.15s; }
+.level-bar.bar-2 { animation-delay: 0.35s; }
+.level-bar.bar-3 { animation-delay: 0.55s; }
 
 @keyframes hero-fade-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .level-bar rect, .level-bar circle { opacity: 1; }
-.level-bar { opacity: 0; }
 
 /* -------------------------------------------------------------------------
    7. SECOES GERAIS
@@ -527,6 +514,131 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .value-item h3 { font-size: 1rem; color: var(--c-gold-light); margin-bottom: 8px; }
 .value-item p { color: rgba(244, 241, 233, 0.72); font-size: 0.95rem; }
+
+/* --- Infografico "O conceito da marca": cartao com miniatura, que abre
+       em um lightbox com zoom (ver infographic-lightbox mais abaixo). --- */
+.about-infographic {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.infographic-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  padding: 0;
+  border: 1px solid var(--c-border-dark);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: none;
+  cursor: zoom-in;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.infographic-card:hover,
+.infographic-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(244, 241, 233, 0.28);
+  box-shadow: var(--shadow-card);
+}
+.infographic-card img { display: block; width: 100%; height: auto; }
+.infographic-card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-bottom: 18px;
+  background: linear-gradient(to top, rgba(6, 7, 9, 0.85) 0%, rgba(6, 7, 9, 0) 45%);
+  color: var(--c-cream);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.infographic-card:hover .infographic-card-overlay,
+.infographic-card:focus-visible .infographic-card-overlay { opacity: 1; }
+.infographic-card-icon svg {
+  width: 22px; height: 22px;
+  fill: none;
+  stroke: var(--c-cream);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.infographic-caption {
+  color: rgba(244, 241, 233, 0.6);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* --- Lightbox do infografico: fundo escuro, imagem centralizada,
+       com zoom in/out ao clicar (ver script.js). --- */
+.infographic-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(6, 7, 9, 0.94);
+  backdrop-filter: blur(4px);
+}
+.infographic-lightbox[hidden] { display: none; }
+.infographic-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+}
+.infographic-lightbox-img {
+  max-width: 90vw;
+  max-height: 85vh;
+  width: auto;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7);
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+.infographic-lightbox-img.is-zoomed {
+  max-width: none;
+  max-height: none;
+  width: 1024px;
+  cursor: zoom-out;
+  transform: scale(1);
+}
+.infographic-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 301;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--c-border-dark);
+  background: rgba(244, 241, 233, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+.infographic-close:hover { background: rgba(244, 241, 233, 0.16); transform: scale(1.05); }
+.infographic-close svg {
+  width: 18px; height: 18px;
+  stroke: var(--c-cream);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@media (max-width: 640px) {
+  .infographic-lightbox-img.is-zoomed { width: 160vw; }
+}
 
 /* -------------------------------------------------------------------------
    12. CHAMADA FINAL / CONTATO

@@ -145,7 +145,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* -----------------------------------------------------------------------
-     5. ANO ATUAL NO RODAPE
+     5. LIGHTBOX DO INFOGRAFICO "SOBRE A MARCA" (abrir, fechar, zoom)
+  ----------------------------------------------------------------------- */
+  const infographicTrigger = document.getElementById('infographic-trigger');
+  const infographicLightbox = document.getElementById('infographic-lightbox');
+  const infographicClose = document.getElementById('infographic-close');
+  const infographicScroll = document.getElementById('infographic-scroll');
+  const infographicLightboxImg = document.getElementById('infographic-lightbox-img');
+
+  if (infographicTrigger && infographicLightbox && infographicClose && infographicScroll && infographicLightboxImg) {
+    let lastFocusedElement = null;
+
+    const openInfographic = () => {
+      lastFocusedElement = document.activeElement;
+      infographicLightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      infographicClose.focus();
+    };
+
+    const closeInfographic = () => {
+      infographicLightbox.hidden = true;
+      document.body.style.overflow = '';
+      infographicLightboxImg.classList.remove('is-zoomed');
+      infographicScroll.scrollTo(0, 0);
+      if (lastFocusedElement) lastFocusedElement.focus();
+    };
+
+    infographicTrigger.addEventListener('click', openInfographic);
+    infographicClose.addEventListener('click', closeInfographic);
+
+    // Fecha ao clicar fora da imagem (na área escura)
+    infographicScroll.addEventListener('click', (event) => {
+      if (event.target === infographicScroll) closeInfographic();
+    });
+
+    // Clique na imagem alterna entre zoom ampliado e tamanho normal
+    infographicLightboxImg.addEventListener('click', () => {
+      infographicLightboxImg.classList.toggle('is-zoomed');
+    });
+
+    // Fecha com a tecla Esc
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !infographicLightbox.hidden) closeInfographic();
+    });
+  }
+
+  /* -----------------------------------------------------------------------
+     6. ANO ATUAL NO RODAPE
   ----------------------------------------------------------------------- */
   const yearEl = document.getElementById('ano-atual');
   if (yearEl) {
