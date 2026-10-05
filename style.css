@@ -694,6 +694,106 @@ textarea { resize: vertical; min-height: 100px; }
 .form-row.has-error textarea { border-color: #d16a6a; }
 .form-error { font-size: 0.78rem; color: #e08a8a; min-height: 14px; }
 .form-feedback { margin: 0; font-size: 0.9rem; color: var(--c-green-light); min-height: 18px; }
+.form-feedback.is-error { color: #e08a8a; }
+
+/* Aviso de campos obrigatorios + asterisco dourado */
+.form-required-note {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: rgba(244, 241, 233, 0.85);
+  background: rgba(201, 162, 39, 0.08);
+  border-left: 3px solid var(--c-gold);
+  border-radius: var(--radius-sm);
+}
+.form-required-note strong { color: var(--c-cream); font-weight: 600; }
+.req { color: var(--c-gold-light); font-weight: 700; margin-left: 2px; }
+
+/* Destaque mais visivel dos campos em branco/invalidos */
+.form-row.has-error input,
+.form-row.has-error textarea {
+  background: rgba(209, 106, 106, 0.08);
+  box-shadow: 0 0 0 3px rgba(209, 106, 106, 0.18);
+}
+.form-row.has-error > label { color: #e8a0a0; }
+
+/* Campo anti-spam: fora da tela */
+.form-honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+#form-submit:disabled { opacity: 0.7; cursor: wait; transform: none; }
+
+/* Confirmacao de envio: botao centralizado sobre fundo escuro */
+.form-success {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(6, 7, 9, 0.82);
+  backdrop-filter: blur(4px);
+  animation: formSuccessFade 0.25s ease;
+}
+.form-success[hidden] { display: none; }
+.form-success-btn {
+  max-width: 460px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 36px 30px 28px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: linear-gradient(180deg, var(--c-green-light) 0%, var(--c-green) 100%);
+  color: var(--c-cream);
+  font-family: var(--font-body);
+  text-align: center;
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.25) inset,
+    0 -3px 0 rgba(0, 0, 0, 0.18) inset,
+    0 24px 50px -18px rgba(0, 0, 0, 0.7);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  animation: formSuccessPop 0.3s ease;
+}
+.form-success-btn:hover { transform: translateY(-2px); }
+.form-success-btn:active { transform: translateY(1px); }
+.form-success-btn:focus-visible { outline: 3px solid var(--c-gold-light); outline-offset: 4px; }
+.form-success-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(244, 241, 233, 0.16);
+  border: 2px solid var(--c-gold-light);
+}
+.form-success-icon svg {
+  width: 28px; height: 28px;
+  fill: none;
+  stroke: var(--c-cream);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.form-success-text {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.form-success-hint {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(244, 241, 233, 0.75);
+}
+@keyframes formSuccessFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes formSuccessPop { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .form-success, .form-success-btn { animation: none; }
+}
 
 /* -------------------------------------------------------------------------
    13. FOOTER
